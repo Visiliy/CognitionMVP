@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognition</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo-round (1).png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <div class="logo-wrapper">
+        <div class="logo-div">
+            <img src="{{ url_for('static', filename='assets/logo.jpeg') }}" class="logo-img">
+            <span class="logo-text">Cognition AI</span>
+        </div>
+    </div>
+    <div class="chat-main-wrapper">
+        <div class="chat-text">
+        </div>
+        <div class="chat-wrapper">
+            <h1 class="main-text">Cognition AI</h1>
+            <h2 class="second-main-text">Точность и информативность превыше всего</h2>
+            <div class="option" style="display: none;">
+                <ul>
+                    <li class="add-files">Добавить файл</li>
+                </ul>
+            </div>
+            <div class="chat">
+                <button class="options-btn">+</button>
+                <input placeholder="Задай любой вопрос..." class="input-chat"/>
+                <button class="send-btn">↑</button>
+            </div>
+            <ul class="selectedFilesList" style="display: none;"></ul>
+        </div>
+        <input type="file" id="fileInput" multiple style="display: none;" accept=".pdf,.txt,.docx"/>
+    </div>
+    <script src="../static/js/main.js"></script>
+</body>
+</html>

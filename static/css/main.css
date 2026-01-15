@@ -1,0 +1,236 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    background-color: black;
+    height: 100vh;
+    display: block;
+}
+
+.logo-wrapper {
+    height: 100px;
+    display: inline;
+    align-items: flex-start;
+    user-select: none;
+}
+
+.logo-div {
+    width: fit-content;
+    height: 100px;
+    display: flex;
+}
+
+.logo-img {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.logo-text {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    align-self: center;
+}
+
+.chat-main-wrapper {
+    width: 100%;
+    overflow: hidden;
+    height: calc(100% - 100px);
+}
+
+.chat-wrapper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    transition: 2s ease;
+    top: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+}
+
+.chat-wrapper.pinned-to-bottom {
+    top: auto;
+    bottom: 20px;
+    transition: 2s ease;
+    transform: translateX(-50%);
+}
+
+.chat-text {
+    color: white;
+    width: 50%;
+    height: calc(100% - 150px);
+    margin: 0 auto 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+    bottom: 70px;
+    box-sizing: border-box;
+}
+
+.chat-text::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-text::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+}
+
+.chat-text::-webkit-scrollbar-track {
+    background-color: #333;
+    border-radius: 10px;
+}
+
+.user-text,
+.model-text {
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.user-text {
+    background-color: #444;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.model-text {
+    align-self: flex-start;
+    text-align: left;
+}
+
+.chat {
+    width: 100%;
+    background-color: #333;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-chat {
+    height: 40px;
+    outline: none;
+    border: none;
+    color: white;
+    width: calc(100% - 80px);
+    background-color: #333;
+    font-size: 16px;
+    padding: 0;
+}
+
+.options-btn, .send-btn {
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    width: 30px;
+    height: 30px;
+    transition: 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+}
+
+.main-text, .second-main-text {
+    color: white;
+    justify-content: center;
+    text-align: center;
+}
+
+.main-text {
+    margin-bottom: -25px;
+}
+
+.second-main-text {
+    margin-bottom: 10px;
+}
+
+.options-btn:hover, .send-btn:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.send-btn {
+    margin-left: auto;
+}
+
+.input-chat::placeholder {
+    color: white;
+}
+
+.option {
+    color: white;
+    background-color: #333;
+    padding: 3px 10px;
+    border: 1px solid #555;
+    border-radius: 30px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.selectedFilesList {
+    width: fit-content;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: #333;
+    display: inline-block;
+    border: 1px solid #555;
+    max-width: 200px;
+    max-height: 250px;
+    overflow: auto;
+}
+
+.selectedFilesList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.selectedFilesList::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.selectedFilesList::-webkit-scrollbar-track {
+    background-color: #333;
+    border-radius: 10px;
+}
+
+li {
+    display: flex;
+    cursor: pointer;
+    padding: 2px;
+    margin-left: -40px;
+}
+
+li:hover {
+    width: fit-content;
+    color: #000;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.file {
+    color: white;
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .chat-wrapper {
+        width: 90%;
+    }
+
+    .chat-text {
+        width: 90%;
+    }
+}
