@@ -40,5 +40,5 @@ def chat():
         return Response("Server error", status=502, mimetype='text/plain')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5077))
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port, debug=False)
