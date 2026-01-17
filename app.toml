@@ -1,4 +1,4 @@
-app = "cognition-backend"
+app = "cognition-backend-llm"
 primary_region = "ams"
 
 [build]
