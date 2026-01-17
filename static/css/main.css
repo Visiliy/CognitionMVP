@@ -113,6 +113,7 @@ body {
     display: flex;
     align-items: center;
     position: relative;
+    box-sizing: border-box;
 }
 
 .input-chat {
@@ -123,7 +124,8 @@ body {
     width: calc(100% - 80px);
     background-color: #333;
     font-size: 16px;
-    padding: 0;
+    padding: 0 10px;
+    box-sizing: border-box; 
 }
 
 .options-btn, .send-btn {
@@ -206,11 +208,15 @@ body {
     border-radius: 10px;
 }
 
+.option li {
+    margin-left: -40px;
+}
+
 li {
     display: flex;
     cursor: pointer;
     padding: 2px;
-    margin-left: -40px;
+    color: white;
 }
 
 li:hover {

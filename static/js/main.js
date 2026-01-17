@@ -90,88 +90,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const optionss_btn = document.querySelector(".options-btn");
-const option = document.querySelector(".option");
+document.addEventListener("DOMContentLoaded", () => {
+    const optionss_btn = document.querySelector(".options-btn");
+    const option = document.querySelector(".option");
+    const add_files = document.querySelector(".add-files");
+    const files_cloud = document.querySelector("#fileInput");
+    const selectedFilesList = document.querySelector(".selectedFilesList");
+    const send_btn = document.querySelector(".send-btn");
+    const chat_wrapper = document.querySelector(".chat-wrapper");
+    const main_text = document.querySelector(".main-text");
+    const second_main_text = document.querySelector(".second-main-text");
+    const chat_input = document.querySelector('.input-chat');
+    const chat_text = document.querySelector(".chat-text");
 
-optionss_btn.addEventListener("click", () => {
-    var ds = option.style.display;
-    if (ds === "none") {
-        option.style.display = "";
-    } else {
-        option.style.display = "none";
-    }
-});
+    let selectedFiles = [];
 
-const add_files = document.querySelector(".add-files");
-const files_cloud = document.querySelector("#fileInput");
-const selectedFilesList = document.querySelector(".selectedFilesList");
-let selectedFiles = [];
-
-add_files.addEventListener("click", () => {
-    files_cloud.click();
-});
-
-files_cloud.addEventListener("change", (event) => {
-    const files = Array.from(event.target.files);
-    selectedFiles.push(...files);
-    files.forEach(file => {
-        const li = document.createElement("li");
-        li.className = "file";
-        li.textContent = file.name;
-        selectedFilesList.appendChild(li);
-    });
-    selectedFilesList.style.display = selectedFiles.length > 0 ? "" : "none";
-});
-
-const send_btn = document.querySelector(".send-btn");
-const chat_wrapper = document.querySelector(".chat-wrapper");
-const main_text = document.querySelector(".main-text");
-const second_main_text = document.querySelector(".second-main-text");
-const chat_input = document.querySelector('.input-chat');
-const chat_text = document.querySelector(".chat-text");
-
-send_btn.addEventListener("click", () => {
-    const message = chat_input.value.trim();
-    chat_input.value = "";
-    main_text.style.display = "none";
-    second_main_text.style.display = "none";
-    chat_wrapper.classList.add('pinned-to-bottom');
-    let user_text = document.createElement("p");
-    user_text.className = "user-text";
-    user_text.textContent = message;
-    chat_text.appendChild(user_text);
-
-    const formData = new FormData();
-    formData.append("message", message);
-
-    selectedFiles.forEach(file => {
-        formData.append("files", file);
+    optionss_btn.addEventListener("click", () => {
+        option.style.display = option.style.display === "none" ? "block" : "none";
     });
 
-    fetch("/chat", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => {
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
+    add_files.addEventListener("click", () => {
+        files_cloud.click();
+    });
 
-        let model_text = document.createElement("p");
-        model_text.className = "model-text";
-        chat_text.appendChild(model_text);
-        reader.read().then(function process({ done, value }) {
-            if (done) {
-                console.log("Поток завершён");
-                return;
-            }
-
-            const chunk = decoder.decode(value, { stream: true });
-
-            model_text.textContent += chunk
-            return reader.read().then(process);
+    files_cloud.addEventListener("change", (event) => {
+        const files = Array.from(event.target.files);
+        selectedFiles.push(...files);
+        selectedFilesList.innerHTML = "";
+        files.forEach(file => {
+            const li = document.createElement("li");
+            li.textContent = file.name;
+            selectedFilesList.appendChild(li);
         });
-    })
-    .catch(err => {
-        console.error("Ошибка потока:", err);
+        selectedFilesList.style.display = "block";
+    });
+
+    send_btn.addEventListener("click", () => {
+        const message = chat_input.value.trim();
+        if (!message && selectedFiles.length === 0) return;
+
+        chat_input.value = "";
+        main_text.style.display = "none";
+        second_main_text.style.display = "none";
+        chat_wrapper.classList.add('pinned-to-bottom');
+
+        const user_text = document.createElement("p");
+        user_text.className = "user-text";
+        user_text.textContent = message || "(файлы)";
+        chat_text.appendChild(user_text);
+
+        const formData = new FormData();
+        formData.append("message", message);
+        selectedFiles.forEach(file => {
+            formData.append("files", file);
+        });
+
+        fetch("/chat", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            // Очищаем файлы сразу после получения ответа
+            selectedFiles = [];
+            files_cloud.value = "";
+            selectedFilesList.innerHTML = "";
+            selectedFilesList.style.display = "none";
+
+            const model_text = document.createElement("p");
+            model_text.className = "model-text";
+            chat_text.appendChild(model_text);
+
+            return reader.read().then(function process({ done, value }) {
+                if (done) return;
+                const chunk = decoder.decode(value, { stream: true });
+                model_text.textContent += chunk;
+                chat_text.scrollTop = chat_text.scrollHeight;
+                return reader.read().then(process);
+            });
+        })
+        .catch(err => {
+            console.error("Ошибка:", err);
+            selectedFiles = [];
+            files_cloud.value = "";
+            selectedFilesList.innerHTML = "";
+            selectedFilesList.style.display = "none";
+        });
     });
 });
