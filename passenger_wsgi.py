@@ -4,17 +4,17 @@ from search_pipline import CognitionSearch
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
-CORS(app)
+application = Flask(__name__)
+CORS(application)
 
 UPLOAD_FOLDER = 'files'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route('/')
+@application.route('/')
 def index():
     return render_template('main.html')
 
-@app.route("/chat", methods=["POST"])
+@application.route("/chat", methods=["POST"])
 def chat():
     try:
         files = request.files.getlist("files")
@@ -41,4 +41,4 @@ def chat():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    application.run(host='0.0.0.0', port=port, debug=False)
