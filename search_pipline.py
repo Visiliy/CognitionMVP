@@ -28,7 +28,7 @@ class CognitionSearch:
 
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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",
+            api_key="",
         )
 
         self.bert_embeddings, self.st_embeddings = self.__processing_and_loading_documents(
@@ -210,6 +210,8 @@ class CognitionSearch:
                 st_weight = 0.4
 
                 similarity = (bert_weight * similarity1 + st_weight * similarity2)
+                print(similarity1)
+                print(similarity2)
                 if similarity < self.SIMILARITY_THRESHOLD:
                     continue
                 relevant_documents.append((i + 1, similarity))

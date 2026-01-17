@@ -1,7 +1,7 @@
+import os
 from flask import Flask, Response, request, render_template
 from search_pipline import CognitionSearch
 from flask_cors import CORS
-import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -20,6 +20,7 @@ def chat():
         files = request.files.getlist("files")
         message = request.form.get("message", "")
         print("Сообщение:", message)
+        
         for file in files:
             if file.filename == '':
                 continue
@@ -28,15 +29,16 @@ def chat():
             file.save(filepath)
 
         def generate():
-            search = CognitionSearch("files", "mps")
+            search = CognitionSearch("files", "cpu")
             for chunk in search.generate_answer(message):
                 yield chunk
 
-        return Response(generate(), mimetype='text/plain')
+        return Response(generate(), mimetype='text/plain; charset=utf-8')
     
     except Exception as e:
-        print(e)
+        print(f"Ошибка в /chat: {e}")
         return Response("Server error", status=502, mimetype='text/plain')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5077)
+    port = int(os.environ.get('PORT', 5077))
+    app.run(host='0.0.0.0', port=port, debug=False)
