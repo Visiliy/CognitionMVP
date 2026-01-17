@@ -1,0 +1,49 @@
+app = "cognition-backend"
+primary_region = "ams"
+
+[build]
+  image = "flyio/python:3.12"
+  
+[build.args]
+  PYTHON_VERSION = "3.12.7"
+
+[env]
+  PORT = "10000"
+  PYTHONUNBUFFERED = "1"
+  FLASK_ENV = "production"
+
+[deploy]
+  strategy = "rolling"
+  max_unavailable = 0
+
+[processes]
+  app = "gunicorn app:app"
+
+[http_service]
+  internal_port = 10000
+  force_https = true
+  auto_start_machines = true
+  auto_stop_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+  
+  [[http_service.ports]]
+    port = 80
+    handlers = ["http"]
+  
+  [[http_service.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+[[http_service.checks]]
+  interval = 10000
+  grace_period = "5s"
+  method = "GET"
+  path = "/"
+  protocol = "http"
+  timeout = 2000
+  restart_limit = 3
+
+[machine]
+  cpus = 1
+  memory = "512MB"
